@@ -4,7 +4,10 @@ import argparse
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 
+sys.path.append("D:/Testing/cryptogui/data")
+from subscriber import Subscriber
 from ui_market_window import MarketWindow
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--config",   default="config.yaml", help='cryptostore configuration containing subscribed instruments')
