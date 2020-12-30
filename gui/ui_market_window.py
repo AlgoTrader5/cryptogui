@@ -1,12 +1,13 @@
 from decimal import Decimal
-from event import QuoteEvent, TradeEvent, TickType
+# from event import QuoteEvent, TradeEvent, TickType
 from PyQt5 import QtCore, QtWidgets, QtGui
 
 class MarketWindow(QtWidgets.QTableWidget):
     tick_signal = QtCore.pyqtSignal(object)
 
-    def __init__(self, ui_events_engine=None, parent=None):
+    def __init__(self, subscriptions, ui_events_engine=None, parent=None):
         super(MarketWindow, self).__init__(parent)
+        self.subscriptions = subscriptions
         self.ui_events_engine = ui_events_engine
         self.setFont(QtGui.QFont("Helvetica [Cronyx]", 10))
         self.headers = ['instrument','bsize','bid','ask','asize','spread','last_price','size']
@@ -16,33 +17,19 @@ class MarketWindow(QtWidgets.QTableWidget):
         self.cellClicked.connect(self.cell_clicked)
         self.awaited_buttons = []                      # tracks buttons waiting for server response to strategy start/stop
 
-    @QtCore.pyqtSlot()
-    def activate_clicked(self):
-        button = self.sender()
-        index = self.indexAt(button.pos())
-        instrument_index = index.sibling(index.row(), 0)
-        instrument = self.itemFromIndex(instrument_index).text()
-        # get sym, exchange and current status
-        # index = self.indexAt(button.pos())
-        # if index.isValid():
-        #     sym = self.item(index.row(), self.headers.index('sym'))
-        #     exchange = self.item(index.row(), self.headers.index('exchange'))
-        #     s = StrategyStatusEvent()
-        #     s.deserialize(sym.text(), exchange.text(), button.text())
-        #     self._ui_events_engine.put(s)
 
     def cell_clicked(self, row, column):
         if column == 0:
             item = self.item(row, column)
             name  = item.text()
-            print(f'cell clicked {row} {column} instrument full_name={name}')
+            print(f'cell clicked {row} {column} name={name}')
 
     def quantize_decimal(self, d):
         PLACES = Decimal(10) ** -10     # same as Decimal ('0.00000001')
         return str(Decimal(d).quantize(PLACES)).rstrip('0')
 
     def init_table(self):
-        row = len(self.instrument_list)
+        row = len(self.subscriptions)
         col = len(self.headers)
         self.setRowCount(row)
         self.setColumnCount(col)
@@ -52,26 +39,21 @@ class MarketWindow(QtWidgets.QTableWidget):
         self.verticalHeader().setVisible(False)
         self.setAlternatingRowColors(True)
         self.setSortingEnabled(False)
-        # set sizes
         self.setColumnWidth(self.headers.index('instrument'), 125)
         self.setColumnWidth(self.headers.index('bsize'), 85)
         self.setColumnWidth(self.headers.index('bid'), 77)
         self.setColumnWidth(self.headers.index('ask'), 77)
         self.setColumnWidth(self.headers.index('asize'), 85)
         self.setColumnWidth(self.headers.index('spread'), 68)
-        self.setColumnWidth(self.headers.index('price'), 66)
+        self.setColumnWidth(self.headers.index('last_price'), 66)
         self.setColumnWidth(self.headers.index('size'), 80)
         for i in range(row):
-            self.setItem(i, 0, QtWidgets.QTableWidgetItem(self.instrument_list[i])) # instrument full_name
+            self.setItem(i, 0, QtWidgets.QTableWidgetItem(self.subscriptions[i])) # instrument full_name
             for j in range(1, col):
                 self.setItem(i, j, QtWidgets.QTableWidgetItem(0.0))
-                # activate button
-                if j == self.headers.index('activate'):
-                    activate_button = QtWidgets.QPushButton('Off')
-                    self.setCellWidget(i, j, activate_button)
-                    activate_button.clicked.connect(self.activate_clicked)
 
-            exch = self.instrument_list[i].split("-")[0].lower()
+
+            exch = self.subscriptions[i].split("-")[0].lower()
             # set cell background colors
             # self.item(i, 0).setBackground(self.color_exch_map[exch])  # exch background
             self.item(i, 2).setBackground(QtGui.QColor(70,130,180))     # bid background
@@ -82,7 +64,7 @@ class MarketWindow(QtWidgets.QTableWidget):
 
     def update_table(self, tickevent):
         try:
-            row = self.instrument_list.index(tickevent.full_name)
+            row = self.subscriptions.index(tickevent.full_name)
             if tickevent.tick_type == TickType.TRADE:
                 self.item(row, 6).setText(self.quantize_decimal(tickevent.price))
                 self.item(row, 7).setText(self.quantize_decimal(tickevent.size))
@@ -98,6 +80,6 @@ class MarketWindow(QtWidgets.QTableWidget):
                 # self.item(row, 5).setText(self.quantize_decimal(tickevent.spread))
         except ValueError as e:
             pass
-            # print(f"VALUE ERROR!!!! Cannot find {tickevent.full_name} in {self.instrument_list}")
+            # print(f"VALUE ERROR!!!! Cannot find {tickevent.full_name} in {self.subscriptions}")
 
 
