@@ -13,6 +13,7 @@ from multiprocessing import Process
 from pandas import Timestamp
 from queue import Queue, Empty
 from zmq.utils.monitor import recv_monitor_message
+
 from event import QuoteEvent, TradeEvent
 
 def get_args():
@@ -25,7 +26,7 @@ def get_time():
 
 class Subscriber:
     def __init__(self, addr, ui_engine=None, ctx=None):
-        self.addr    = sub_addr
+        self.addr        = addr
         self.ui_engine   = ui_engine
         self.remote_addr = f"{USERNAME}@{HOST}:{PORT}"
         self.ctx         = ctx if ctx else zmq.Context.instance()
@@ -35,7 +36,7 @@ class Subscriber:
         self._thread     = threading.Thread(target=self.run, daemon=True)
         
     def _connect_subcriber(self):
-        print(f"ServerSubscriber connect addr={self.sub_addr}\nRemote addr={self.remote_addr}")
+        print(f"Subscriber connect addr={self.sub_addr}\nRemote addr={self.remote_addr}")
         self.socket = self.ctx.socket(zmq.SUB)
         self.socket.setsockopt(zmq.SUBSCRIBE, b'')
         monitor = self.socket.get_monitor_socket()
