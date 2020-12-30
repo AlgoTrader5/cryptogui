@@ -26,6 +26,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def load_config(self, config):
         pass
+    
+    def _tick_event_handler(self, t):
+        self.market_window.tick_signal.emit(t)
 
     def init_menu(self):
         menubar = self.menuBar()
@@ -46,6 +49,11 @@ class MainWindow(QtWidgets.QMainWindow):
         sysMenu.addAction(sys_exitAction)
 
     def init_central_area(self):
+        #-------------------------------- Top Left ------------------------------------------#
+        topleft = MarketWindow()
+        self.market_window = topleft
+        # -------------------------------- Top right ------------------------------------------#
+      
         self.central_widget = QtWidgets.QWidget()
         hbox = QtWidgets.QHBoxLayout()
         main_layout = QtWidgets.QHBoxLayout()
@@ -54,14 +62,11 @@ class MainWindow(QtWidgets.QMainWindow):
         hbox.addWidget(win)
         self.central_widget.setLayout(hbox)
         self.setCentralWidget(self.central_widget)
-        
-    def open_proj_folder(self):
-        pass
-        # webbrowser.open(root)
-        
+    
     def closeEvent(self, a0: QtGui.QCloseEvent):
         print("QtGui.QCloseEvent")
 
+        
 def main():
     app = QtWidgets.QApplication([])
     import qdarkstyle
