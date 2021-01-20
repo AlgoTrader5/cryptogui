@@ -47,12 +47,13 @@ redis:
 exchanges:
     COINBASE:
         retries: -1
-        l3_book:
-            symbols: [BTC-USD]
-            book_delta: true
+        l2_book:
+            symbols: [BTC-USD, ETH-USD]
+            book_delta: false
             book_interval: 100000
-        trades: [BTC-USD, ETH-USD, ETH-BTC]
-        ticker: [BTC-USD]
+            max_depth: 1
+        trades: [BTC-USD, ETH-USD]
+        ticker: [BTC-USD, ETH-USD]
 
 # Where to store the data. Currently arctic, influx, elastic, and parquet are supported. More than one can be enabled
 storage: []
