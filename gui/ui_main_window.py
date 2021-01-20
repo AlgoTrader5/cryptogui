@@ -4,22 +4,30 @@ import argparse
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 
-sys.path.append("D:/Testing/cryptogui/data")
-from subscriber import Subscriber
+sys.path.append("D:/repos/cryptogui/data")
+from live_event_engine import LiveEventEngine
+from datafeed import DataFeed
 from ui_market_window import MarketWindow
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--config",   default="config.yaml", help='cryptostore configuration containing subscribed instruments')
-parser.add_argument("--zmq-port", dest="zmq_port", default=5556,   help='zmq connection to receive market updates')
+parser.add_argument("--addr", default="tcp://127.0.0.1:5678",   help='zmq connection to receive market updates')
 args = parser.parse_args()
 
 
 class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self, config: str, port: int):
+    '''
+    config: cryptostore config
+
+    port: zmq port for subscribed datafeed (cryptostore)
+    '''
+    def __init__(self, config: str, addr: str):
         super(MainWindow, self).__init__()
         self.config = config
-        self.port = port
+        self.addr = addr
+        self.event_engine = LiveEventEngine()
+        self.data_feed = DataFeed(addr=addr, event_engine=self.event_engine)
 
         # 1. set up gui windows
         self.central_widget = None
@@ -27,6 +35,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowTitle('ConfigUI')
         self.setFont(QtGui.QFont("Helvetica [Cronyx]", 10))
         self.init_central_area()
+
+
+        self.data_feed.start()
 
     
     def _tick_event_handler(self, t):
@@ -69,7 +80,7 @@ def main():
         e
     # config = args.config
     config = ["COINBASE-BTC-USD","COINBASE-ETH-USD","COINBASE-ETH-BTC"]
-    win = MainWindow(config, args.zmq_port)
+    win = MainWindow(config, args.addr)
     win.show()
     sys.exit(app.exec_())
 
