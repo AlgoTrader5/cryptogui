@@ -5,9 +5,11 @@ import argparse
 from PyQt5 import QtWidgets, QtCore, QtGui
 
 sys.path.append("D:/repos/cryptogui/data")
-from live_event_engine import LiveEventEngine
 from datafeed import DataFeed
+from live_event_engine import LiveEventEngine
 from ui_market_window import MarketWindow
+
+
 
 
 parser = argparse.ArgumentParser()
