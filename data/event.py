@@ -20,7 +20,7 @@ class Event(object):
 
 
 class QuoteEvent(Event):
-    def __init__(self, exchange, instrument, data):
+    def __init__(self, exchange, pair, data):
         """ example data:
         {'timestamp': 1594266197.777497, 
          'receipt_timestamp': 1594266197.777497, 
@@ -33,12 +33,24 @@ class QuoteEvent(Event):
         self.timestamp         = data['timestamp']
         self.receipt_timestamp = data['receipt_timestamp']
         self.exchange          = exchange
-        self.instrument        = instrument
-        self.full_name         = f"{exchange}-{instrument}"
+        self.pair              = pair
+        self.full_name         = f"{exchange}-{pair}"
         self.ask_price         = next(iter(data['ask']))
         self.bid_price         = next(iter(data['bid']))
         self.ask_size          = data['ask'][self.ask_price]
         self.bid_size          = data['bid'][self.bid_price]
+
+    def __str__(self):
+        return  f"{self.event_type} " \
+                f"{self.tick_type} " \
+                f"timestamp={self.timestamp} " \
+                f"receipt timestamp={self.receipt_timestamp} " \
+                f"exchange={self.exchange} " \
+                f"pair={self.pair} " \
+                f"bidprice={self.bid_price} " \
+                f"askprice={self.ask_price} " \
+                f"bidsize={self.bid_size} " \
+                f"asksize={self.ask_size}"
 
 
 
