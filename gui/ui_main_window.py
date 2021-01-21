@@ -6,16 +6,15 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 
 sys.path.append("D:/repos/cryptogui/data")
 from datafeed import DataFeed
+from event import EventType
 from live_event_engine import LiveEventEngine
 from ui_market_window import MarketWindow
 
-
-
-
-parser = argparse.ArgumentParser()
-parser.add_argument("--config",   default="config.yaml", help='cryptostore configuration containing subscribed instruments')
-parser.add_argument("--addr", default="tcp://127.0.0.1:5678",   help='zmq connection to receive market updates')
-args = parser.parse_args()
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config",   default="config.yaml", help='cryptostore configuration containing subscribed instruments')
+    parser.add_argument("--addr", default="tcp://127.0.0.1:5678",   help='zmq connection to receive market updates')
+    return parser.parse_args()
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -38,6 +37,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setFont(QtGui.QFont("Helvetica [Cronyx]", 10))
         self.init_central_area()
 
+        self.event_engine.register_handler(EventType.TICK, self._tick_event_handler)
+        self.event_engine.start()
 
         self.data_feed.start()
 
@@ -48,7 +49,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def init_central_area(self):
         self.central_widget = QtWidgets.QWidget()
-
         #-------------------------------- Top Left ------------------------------------------#
         topleft = MarketWindow(subscriptions=self.config)
         self.market_window = topleft
@@ -68,12 +68,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.central_widget.setLayout(hbox)
         self.setCentralWidget(self.central_widget)
     
+
     def closeEvent(self, a0: QtGui.QCloseEvent):
         # close any running processes/threads here
         print("QtGui.QCloseEvent")
+        self.event_engine.stop()
 
         
 def main():
+    args = get_args()
+
     app = QtWidgets.QApplication([])
     try:
         import qdarkstyle
