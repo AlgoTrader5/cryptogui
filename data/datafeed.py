@@ -103,12 +103,12 @@ class DataFeed:
                 topic, data = data.split(" ", 1)
                 data = json.loads(data)
                 event_type = topic.split("-")[1]
-                print(event_type, data)
-                # if event_type == 'book':
-                #     exch = topic.split("-")[0]
-                #     pair = "-".join(topic.split("-")[2:])
-                #     e = QuoteEvent(exch, pair, data)
-                #     self.event_engine.put(e)
+                if event_type == 'book':
+                    exch = topic.split("-")[0]
+                    pair = "-".join(topic.split("-")[2:])
+                    # print(event_type, exch, pair, data)
+                    e = QuoteEvent(exch, pair, data)
+                    self.event_engine.put(e)
                 # elif event_type == 'trades':
                 #     e = TradeEvent(data)
                 #     self.event_engine.put(e)
