@@ -1,5 +1,5 @@
 from decimal import Decimal
-# from event import QuoteEvent, TradeEvent, TickType
+from event import QuoteEvent, TradeEvent, TickType
 from PyQt5 import QtCore, QtWidgets, QtGui
 
 class MarketWindow(QtWidgets.QTableWidget):
@@ -63,6 +63,7 @@ class MarketWindow(QtWidgets.QTableWidget):
 
 
     def update_table(self, tickevent):
+        # print(tickevent)
         try:
             row = self.subscriptions.index(tickevent.full_name)
             if tickevent.tick_type == TickType.TRADE:
