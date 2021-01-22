@@ -5,13 +5,16 @@ from time import time
 
 
 class TickType(Enum):
-    TRADE = 0
-    QUOTE = 1
-    BAR   = 2
+    TRADE   = 0
+    QUOTE   = 1
+    BAR     = 2
+    FUNDING = 3
 
+    
 class EventType(Enum):
     TICK  = 0
 
+    
 class Event(object):
     """Base Event class for event-driven system"""
     @property
