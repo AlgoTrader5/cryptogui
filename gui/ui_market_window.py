@@ -78,7 +78,8 @@ class MarketWindow(QtWidgets.QTableWidget):
                 self.item(row, 2).setText(self.quantize_decimal(tickevent.bid_price))
                 self.item(row, 3).setText(self.quantize_decimal(tickevent.ask_price))
                 self.item(row, 4).setText(self.quantize_decimal(tickevent.ask_size))
-                # self.item(row, 5).setText(self.quantize_decimal(tickevent.spread))
+                spread = Decimal(tickevent.ask_price) - Decimal(tickevent.bid_price)
+                self.item(row, 5).setText(self.quantize_decimal(spread))
         except ValueError as e:
             pass
             # print(f"VALUE ERROR!!!! Cannot find {tickevent.full_name} in {self.subscriptions}")
