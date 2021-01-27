@@ -99,23 +99,24 @@ class DataFeed:
             data = None
             try:
                 data = self.socket.recv_string()
-                # print(data)
                 topic, data = data.split(" ", 1)
-                data = json.loads(data)
                 event_type = topic.split("-")[1]
+                data = json.loads(data)
                 if event_type == 'book':
                     exch = topic.split("-")[0]
                     pair = "-".join(topic.split("-")[2:])
-                    # print(event_type, exch, pair, data)
                     e = QuoteEvent(exch, pair, data)
                     self.event_engine.put(e)
-                # elif event_type == 'trades':
-                #     e = TradeEvent(data)
-                #     self.event_engine.put(e)
-                # elif event_type == 'ticker':
-                #     pass
-                # else:
-                #     print(f"Could not determine event_type. Topic={topic}. Event type={event_type}.")
+                elif event_type == 'trades':
+                    pass
+                    # e = TradeEvent(data)
+                    # self.event_engine.put(e)
+                elif event_type == 'ticker':
+                    pass
+                elif event_type == 'funding':
+                    pass
+                else:
+                    print(f"Could not determine event_type. Topic={topic}. Event type={event_type}. Data={data}")
             except zmq.error.Again:
                 continue
             except Exception as e:
