@@ -53,7 +53,24 @@ exchanges:
             book_interval: 100000
             max_depth: 1
         trades: [BTC-USD, ETH-USD]
-        ticker: [BTC-USD, ETH-USD]
+    DERIBIT:
+        retries: -1
+        l2_book:
+            symbols: [BTC-PERPETUAL]
+            book_delta: false
+            book_interval: 100000
+            max_depth: 1
+        trades: [BTC-PERPETUAL]
+        funding: [BTC-PERPETUAL]
+    FTX:
+        retries: -1
+        l2_book:
+            symbols: [BTC-PERP]
+            book_delta: false
+            book_interval: 100000
+            max_depth: 1
+        trades: [BTC-PERP]
+        funding: [BTC-PERP]
 
 # Where to store the data. Currently arctic, influx, elastic, and parquet are supported. More than one can be enabled
 storage: []
