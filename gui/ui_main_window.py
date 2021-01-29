@@ -10,9 +10,12 @@ from event import EventType
 from live_event_engine import LiveEventEngine
 from ui_market_window import MarketWindow
 
+sys.path.append("D:/repos/cryptogui/utils")
+from get_subscriptions_from_config import get_subscriptions_from_config
+
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config",   default="config.yaml", help='cryptostore configuration containing subscribed instruments')
+    parser.add_argument("--config",   default="D:/repos/cryptogui/config.yaml", help='cryptostore configuration containing subscribed instruments')
     parser.add_argument("--addr", default="tcp://127.0.0.1:5678",   help='zmq connection to receive market updates')
     return parser.parse_args()
 
@@ -83,9 +86,11 @@ def main():
         import qdarkstyle
         app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     except ImportError:
-        e
-    # config = args.config
-    config = ["COINBASE-BTC-USD","COINBASE-ETH-USD","COINBASE-ETH-BTC"]
+        pass
+    
+    # config = ["COINBASE-BTC-USD","COINBASE-ETH-USD","COINBASE-ETH-BTC"]
+    config = get_subscriptions_from_config(args.config)
+
     win = MainWindow(config, args.addr)
     win.show()
     sys.exit(app.exec_())
