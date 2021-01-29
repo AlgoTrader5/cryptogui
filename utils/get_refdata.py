@@ -24,11 +24,11 @@ def get_args():
 class DeribitRefData:
     def __init__(self):
         self.name = "Deribit"
-        # self.url = "https://test.deribit.com/api/v2/public/get_instruments?currency=BTC&expired=false&kind=option"
+        self.url = "https://test.deribit.com/api/v2/public/get_instruments?currency=BTC&expired=false&kind=option"
         # self.url = "https://test.deribit.com/api/v2/public/get_instruments?currency=ETH&expired=false&kind=option"
         # self.url = "https://test.deribit.com/api/v2/public/get_instruments?currency=USDT&expired=false&kind=option"
         # self.url = "https://test.deribit.com/api/v2/public/get_instruments?currency=BTC&expired=false&kind=future"
-        self.url = "https://test.deribit.com/api/v2/public/get_instruments?currency=ETH&expired=false&kind=future"
+        # self.url = "https://test.deribit.com/api/v2/public/get_instruments?currency=ETH&expired=false&kind=future"
         # self.url = "https://test.deribit.com/api/v2/public/get_instruments?currency=USDT&expired=false&kind=future"
         
         self.params = None
