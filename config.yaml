@@ -56,11 +56,11 @@ exchanges:
     DERIBIT:
         retries: -1
         l2_book:
-            symbols: [BTC-PERPETUAL]
+            symbols: [BTC-PERPETUAL, BTC-25JUN21-48000-P]
             book_delta: false
             book_interval: 100000
             max_depth: 1
-        trades: [BTC-PERPETUAL]
+        trades: [BTC-PERPETUAL, BTC-25JUN21-48000-P]
         funding: [BTC-PERPETUAL]
     FTX:
         retries: -1
