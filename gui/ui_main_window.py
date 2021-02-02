@@ -54,21 +54,43 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def init_central_area(self):
         self.central_widget = QtWidgets.QWidget()
+        hbox = QtWidgets.QHBoxLayout()
+
+        # ------------------ main widget -------------------#
+        win = QtWidgets.QWidget()
+
         #-------------------------------- Top Left ------------------------------------------#
         topleft = MarketWindow(subscriptions=self.config)
         self.market_window = topleft
-        # -------------------------------- Top right ------------------------------------------#
-        topright = QtWidgets.QWidget()
         
+        # -------------------------------- Top right ------------------------------------------#
+        topright = QtWidgets.QTabWidget()
+        tab1 = QtWidgets.QWidget()
+        tab2 = QtWidgets.QWidget()
+        topright.addTab(tab1, 'Deribit Options')
+        topright.addTab(tab2, 'Deribit Index')
+
+        # TAB1
+        # self.deribit_options_window = DeribitOptionsWindow()
+        # tab1_layout = QtWidgets.QVBoxLayout()
+        # tab1_layout.addWidget(self.deribit_options_window)
+        # tab1.setLayout(tab1_layout)
+
+        # TAB2
+        # self.deribit_index_window = DeribitIndexWindow()
+        # tab2_layout = QtWidgets.QVBoxLayout()
+        # tab2_layout.addWidget(self.deribit_index_window)
+        # tab2.setLayout(tab2_layout)
+
         splitter1 = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
         splitter1.addWidget(topleft)
         splitter1.addWidget(topright)
         splitter1.setSizes([700,450])
-        hbox = QtWidgets.QHBoxLayout()
+        
         hbox.addWidget(splitter1)
         main_layout = QtWidgets.QHBoxLayout()
-        win = QtWidgets.QWidget()
         win.setLayout(main_layout)
+
         hbox.addWidget(win)
         self.central_widget.setLayout(hbox)
         self.setCentralWidget(self.central_widget)
@@ -76,7 +98,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def closeEvent(self, a0: QtGui.QCloseEvent):
         # close any running processes/threads here
-        print("QtGui.QCloseEvent")
+        print("Here is a QtGui.QCloseEvent.")
         self.event_engine.stop()
 
         
