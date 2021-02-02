@@ -4,18 +4,20 @@ import argparse
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 
-sys.path.append("D:/repos/cryptogui/data")
+SOURCE_DIR = "D:/repos/cryptogui"
+
+sys.path.append(f"{SOURCE_DIR}/data")
 from datafeed import DataFeed
 from event import EventType
 from live_event_engine import LiveEventEngine
 from ui_market_window import MarketWindow
 
-sys.path.append("D:/repos/cryptogui/utils")
+sys.path.append(f"{SOURCE_DIR}/utils")
 from get_subscriptions_from_config import get_subscriptions_from_config
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config",   default="D:/repos/cryptogui/config.yaml", help='cryptostore configuration containing subscribed instruments')
+    parser.add_argument("--config",   default=f"{SOURCE_DIR}/config.yaml", help='cryptostore configuration containing subscribed instruments')
     parser.add_argument("--addr", default="tcp://127.0.0.1:5678",   help='zmq connection to receive market updates')
     return parser.parse_args()
 
@@ -36,8 +38,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # 1. set up gui windows
         self.central_widget = None
         self.setGeometry(50, 50, 600, 400)
-        self.setWindowTitle('ConfigUI')
-        self.setFont(QtGui.QFont("Helvetica [Cronyx]", 10))
+        self.setWindowTitle('Cryptogui')
+        self.setFont(QtGui.QFont("Helvetica [Cronyx]", 12))
         self.init_central_area()
 
         self.event_engine.register_handler(EventType.TICK, self._tick_event_handler)
