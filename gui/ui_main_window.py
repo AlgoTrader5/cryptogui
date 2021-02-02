@@ -11,6 +11,7 @@ from datafeed import DataFeed
 from event import EventType
 from live_event_engine import LiveEventEngine
 from ui_market_window import MarketWindow
+from deribit_options_window import DeribitOptionsWindow
 
 sys.path.append(f"{SOURCE_DIR}/utils")
 from get_subscriptions_from_config import get_subscriptions_from_config
@@ -71,10 +72,11 @@ class MainWindow(QtWidgets.QMainWindow):
         topright.addTab(tab2, 'Deribit Index')
 
         # TAB1
-        # self.deribit_options_window = DeribitOptionsWindow()
-        # tab1_layout = QtWidgets.QVBoxLayout()
-        # tab1_layout.addWidget(self.deribit_options_window)
-        # tab1.setLayout(tab1_layout)
+        instruments = []
+        self.deribit_options_window = DeribitOptionsWindow(events_engine=self.event_engine)
+        tab1_layout = QtWidgets.QVBoxLayout()
+        tab1_layout.addWidget(self.deribit_options_window)
+        tab1.setLayout(tab1_layout)
 
         # TAB2
         # self.deribit_index_window = DeribitIndexWindow()
