@@ -12,13 +12,16 @@ async def fetch_tickers(session, url):
         return http_response
 
 async def main():
-    urls = []
+    urls = [
+        "https://test.deribit.com/api/v2/public/ticker?instrument_name=BTC-24SEP21-100000-P",
+        # "https://test.deribit.com/api/v2/public/ticker",
+    ]
     tasks = []
     async with aiohttp.ClientSession() as session:
         for url in urls:
             tasks.append(fetch_tickers(session, url))
         ref_data = await asyncio.gather(*tasks, return_exceptions=True)
-        print(ref_data)
+        pprint(ref_data)
 
 
 if __name__ == '__main__':
