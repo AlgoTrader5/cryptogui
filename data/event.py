@@ -33,11 +33,11 @@ class QuoteEvent(Event):
         """
         self.event_type        = EventType.TICK
         self.tick_type         = TickType.QUOTE
-        self.timestamp         = data['timestamp']
-        self.receipt_timestamp = data['receipt_timestamp']
         self.exchange          = exchange
         self.pair              = pair
         self.full_name         = f"{exchange}-{pair}"
+        self.timestamp         = data['timestamp']
+        self.receipt_timestamp = data['receipt_timestamp']
         self.ask_price         = next(iter(data['ask'])) if data['ask'] else 0
         self.bid_price         = next(iter(data['bid'])) if data['bid'] else 0
         self.ask_size          = data['ask'][self.ask_price] if self.ask_price else 0
@@ -71,8 +71,7 @@ class TradeEvent(Event):
             self.side       = data['side']
             self.trade_id   = data['id'] if 'id' in data else None
         except KeyError as e:
-            print(f"ERROR KEYING {data}. {e}")
-
+            print(f"ERROR on TradeEvent. Data={data}. {e}")
 
     def __str__(self):
         return  f"{self.event_type} " \
