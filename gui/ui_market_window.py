@@ -39,14 +39,14 @@ class MarketWindow(QtWidgets.QTableWidget):
         self.verticalHeader().setVisible(False)
         self.setAlternatingRowColors(True)
         self.setSortingEnabled(False)
-        self.setColumnWidth(self.headers.index('instrument'), 125)
-        self.setColumnWidth(self.headers.index('bsize'), 85)
-        self.setColumnWidth(self.headers.index('bid'), 77)
-        self.setColumnWidth(self.headers.index('ask'), 77)
-        self.setColumnWidth(self.headers.index('asize'), 85)
-        self.setColumnWidth(self.headers.index('spread'), 68)
-        self.setColumnWidth(self.headers.index('last_price'), 66)
-        self.setColumnWidth(self.headers.index('size'), 80)
+        self.setColumnWidth(self.headers.index('instrument'), 140)
+        self.setColumnWidth(self.headers.index('bsize'), 90)
+        self.setColumnWidth(self.headers.index('bid'), 80)
+        self.setColumnWidth(self.headers.index('ask'), 80)
+        self.setColumnWidth(self.headers.index('asize'), 90)
+        self.setColumnWidth(self.headers.index('spread'), 80)
+        self.setColumnWidth(self.headers.index('last_price'), 80)
+        self.setColumnWidth(self.headers.index('size'), 90)
         for i in range(row):
             self.setItem(i, 0, QtWidgets.QTableWidgetItem(self.subscriptions[i])) # instrument full_name
             for j in range(1, col):
