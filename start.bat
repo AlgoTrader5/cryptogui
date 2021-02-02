@@ -1,3 +1,1 @@
-cd gui
-python ui_main_window.py
-PAUSE
+python gui/ui_main_window.py
