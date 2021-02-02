@@ -48,20 +48,25 @@ exchanges:
     COINBASE:
         retries: -1
         l2_book:
-            symbols: [BTC-USD, ETH-USD]
+            symbols: [BTC-USD]
             book_delta: false
             book_interval: 100000
             max_depth: 1
-        trades: [BTC-USD, ETH-USD]
+        trades: [BTC-USD]
     DERIBIT:
         retries: -1
         l2_book:
-            symbols: [BTC-PERPETUAL, BTC-25JUN21-48000-P]
+            symbols: [
+                BTC-PERPETUAL, 
+                BTC-25JUN21-48000-P, 
+                BTC-26FEB21-40000-P, 
+                BTC-25JUN21-40000-P, 
+                BTC-25JUN21-52000-C
+            ]
             book_delta: false
             book_interval: 100000
             max_depth: 1
-        trades: [BTC-PERPETUAL, BTC-25JUN21-48000-P]
-        funding: [BTC-PERPETUAL]
+        trades: [BTC-PERPETUAL, BTC-25JUN21-48000-P, BTC-26FEB21-40000-P, BTC-25JUN21-40000-P, BTC-25JUN21-52000-C]
     FTX:
         retries: -1
         l2_book:
@@ -70,7 +75,6 @@ exchanges:
             book_interval: 100000
             max_depth: 1
         trades: [BTC-PERP]
-        funding: [BTC-PERP]
 
 # Where to store the data. Currently arctic, influx, elastic, and parquet are supported. More than one can be enabled
 storage: []
