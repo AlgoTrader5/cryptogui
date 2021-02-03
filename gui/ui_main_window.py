@@ -1,6 +1,9 @@
 import os
 import sys
 import argparse
+import aiohttp
+import asyncio
+import json
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 
@@ -8,7 +11,7 @@ SOURCE_DIR = "D:/repos/cryptogui"
 
 sys.path.append(f"{SOURCE_DIR}/data")
 from datafeed import DataFeed
-from event import EventType
+from event import EventType, ResponseEvent
 from live_event_engine import LiveEventEngine
 from ui_market_window import MarketWindow
 from deribit_options_window import DeribitOptionsWindow
@@ -36,6 +39,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.event_engine = LiveEventEngine()
         self.data_feed = DataFeed(addr=addr, event_engine=self.event_engine)
 
+        # self.global_loop = global_loop if global_loop else asyncio.get_event_loop()
+
         # 1. set up gui windows
         self.central_widget = None
         self.setGeometry(50, 50, 600, 400)
@@ -44,13 +49,42 @@ class MainWindow(QtWidgets.QMainWindow):
         self.init_central_area()
 
         self.event_engine.register_handler(EventType.TICK, self._tick_event_handler)
+        self.event_engine.register_handler(EventType.QUERY, self._query_request_event_handler)
+        self.event_engine.register_handler(EventType.RESPONSE, self._query_response_event_handler)
         self.event_engine.start()
 
         self.data_feed.start()
 
-    
+        
     def _tick_event_handler(self, t):
         self.market_window.tick_signal.emit(t)
+
+    
+    def _query_request_event_handler(self, e):
+        print(f"query request event {e}")
+        loop = asyncio.new_event_loop()
+        loop.run_until_complete(self.async_query(e))
+
+    def _query_response_event_handler(self, e):
+        ''' send data to widget '''
+        if e.query_id == "DERIBIT_OPTIONS" and self.deribit_options_window:
+            self.deribit_options_window.ticker_signal.emit(e)
+
+
+    # ------------------ async requests -------------------#
+    async def fetch(self, client, url):
+        async with client.get(url) as response:
+            http_response = await response.text()
+            http_response = json.loads(http_response)
+            return http_response
+
+    async def async_query(self, e):
+        async with aiohttp.ClientSession() as client:
+            http_response = await self.fetch(client, e.url)
+            response_event = ResponseEvent(e.query_id, http_response)
+            self.event_engine.put(response_event)
+    # --------------------------- END  ----------------------------#
+
 
 
     def init_central_area(self):
