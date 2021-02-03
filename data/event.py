@@ -13,6 +13,8 @@ class TickType(Enum):
     
 class EventType(Enum):
     TICK  = 0
+    QUERY = 1
+    RESPONSE = 2
 
     
 class Event(object):
@@ -20,6 +22,29 @@ class Event(object):
     @property
     def typename(self):
         return self.type.name
+
+class QueryEvent(Event):
+    """ Events placed on event queue will query respective api """
+    def __init__(self, query_id, url):
+        self.event_type = EventType.QUERY
+        self.query_id   = query_id
+        self.url        = url
+
+    def __str__(self):
+        return  f"{self.event_type} " \
+                f"{self.query_id} " \
+                f"{self.url}"
+
+class ResponseEvent(Event):
+    def __init__(self, query_id, http_response):
+        self.event_type     = EventType.RESPONSE
+        self.query_id       = query_id
+        self.http_response  = http_response
+
+    def __str__(self):
+        return  f"{self.event_type} " \
+                f"{self.query_id} " \
+                f"{self.http_response}"
 
 
 class QuoteEvent(Event):
