@@ -7,7 +7,8 @@ import json
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 
-SOURCE_DIR = "D:/repos/cryptogui"
+# SOURCE_DIR = "D:/repos/cryptogui"
+SOURCE_DIR = "C:/Users/Dos/Documents/Adam/repos/cryptogui"
 
 sys.path.append(f"{SOURCE_DIR}/data")
 from datafeed import DataFeed
@@ -45,7 +46,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.central_widget = None
         self.setGeometry(50, 50, 600, 400)
         self.setWindowTitle('Cryptogui')
-        self.setFont(QtGui.QFont("Helvetica [Cronyx]", 12))
+        self.setFont(QtGui.QFont("Helvetica [Cronyx]", 10))
         self.init_central_area()
 
         self.event_engine.register_handler(EventType.TICK, self._tick_event_handler)
@@ -66,7 +67,7 @@ class MainWindow(QtWidgets.QMainWindow):
         loop.run_until_complete(self.async_query(e))
 
     def _query_response_event_handler(self, e):
-        ''' send data to widget '''
+        ''' map data to correct widget based on event query_id '''
         if e.query_id == "DERIBIT_OPTIONS" and self.deribit_options_window:
             self.deribit_options_window.ticker_signal.emit(e)
 
@@ -136,6 +137,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # close any running processes/threads here
         print("Here is a QtGui.QCloseEvent.")
         self.event_engine.stop()
+
 
         
 def main():
