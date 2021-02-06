@@ -39,53 +39,6 @@ class DataFeed:
         self.socket = self.ctx.socket(zmq.SUB)
         self.socket.setsockopt(zmq.SUBSCRIBE, b'')
         self.socket.bind(self.addr)
-        # monitor = self.socket.get_monitor_socket()
-        # zmq.ssh.tunnel_connection(self.socket, self.addr, self.remote_addr, keyfile=self.key_file, paramiko=True)
-        # retries = 0
-        # while retries < 10:
-        #     status = recv_monitor_message(monitor)
-        #     retries += 1
-        #     if status['event'] == zmq.EVENT_HANDSHAKE_SUCCEEDED:
-        #         print("zmq.EVENT_HANDSHAKE_SUCCEEDED")
-        #         return
-        #     elif status['event'] == zmq.EVENT_CONNECTED:
-        #         print("zmq.EVENT_CONNECTED")
-        #     elif status['event'] == zmq.EVENT_CONNECT_DELAYED:
-        #         print("zmq.EVENT_CONNECT_DELAYED")
-        #     elif status['event'] == zmq.EVENT_CONNECT_RETRIED:
-        #         print("zmq.EVENT_CONNECT_RETRIED")
-        #     elif status['event'] == zmq.EVENT_LISTENING:
-        #         print("zmq.EVENT_LISTENING")
-        #     elif status['event'] == zmq.EVENT_BIND_FAILED:
-        #         print("zmq.EVENT_BIND_FAILED")
-        #     elif status['event'] == zmq.EVENT_ACCEPTED:
-        #         print("zmq.EVENT_ACCEPTED ")
-        #     elif status['event'] == zmq.EVENT_ACCEPT_FAILED:
-        #         print("zmq.EVENT_ACCEPT_FAILED")
-        #     elif status['event'] == zmq.EVENT_CLOSED:
-        #         print("zmq.EVENT_CLOSED")
-        #     elif status['event'] == zmq.EVENT_CLOSE_FAILED:
-        #         print("zmq.EVENT_CLOSE_FAILED")
-        #     elif status['event'] == zmq.EVENT_DISCONNECTED:
-        #         print("zmq.EVENT_DISCONNECTED")
-        #     elif status['event'] == zmq.EVENT_MONITOR_STOPPED:
-        #         print("zmq.EVENT_MONITOR_STOPPED")
-        #     elif status['event'] == zmq.EVENT_ALL:
-        #         print("zmq.EVENT_ALL")
-        #     elif status['event'] == zmq.EVENT_HANDSHAKE_FAILED_NO_DETAIL:
-        #         print("zmq.EVENT_HANDSHAKE_FAILED_NO_DETAIL")
-        #         print("EXITING ON HANDSHAKE FAILED")
-        #         sys.exit(0)
-        #     elif status['event'] == zmq.EVENT_HANDSHAKE_FAILED_PROTOCOL:
-        #         print("zmq.EVENT_HANDSHAKE_FAILED_PROTOCOL")
-        #     elif status['event'] == zmq.EVENT_HANDSHAKE_FAILED_AUTH:
-        #         print("zmq.EVENT_HANDSHAKE_FAILED_AUTH")
-        #     else:
-        #         print(f"Do not recognize status {status}")
-        # monitor.close()
-        # if retries >= 10:
-        #     print(f"EXITING! Retries={retries}.")
-        #     sys.exit(1)
         time.sleep(0.3)
 
 
